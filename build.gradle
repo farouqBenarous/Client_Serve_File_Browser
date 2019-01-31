@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+}
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+repositories {
+    mavenCentral()
+}
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+
+task client(type: JavaExec , name: "client") {
+
+    def var = new Properties ()
+
+    // You should change this path  , just go to gradle/wrapper/gradle.properties and copy the path
+    File file = new File("/home/benarousfarouk/Desktop/OISD_Distributed_systesms/Assignments/RMI/RMI_Grade_12/RemoteBrowserFinal/gradle/wrapper/gradle.properties")
+    var.load(file.newDataInputStream())
+
+ 
+    if ( project.hasProperty('registryAddress'))
+    {
+        var.setProperty("registryAddress", registryAddress)
+        var.store(file.newWriter(),null)
+    }
+
+    standardInput = System.in
+    classpath = sourceSets.main.runtimeClasspath
+    main ='RMIClient'
+    jvmArgs = ['-Djava.rmi.security.policy=etc/security.policy']
+
+}
+
+
+
+task server(type: JavaExec) {
+
+    standardInput = System.in
+
+    classpath = sourceSets.main.runtimeClasspath
+
+    main = 'RMIServer'
+    jvmArgs = ['-Djava.rmi.security.policy=etc/security.policy']
+
+
+}
+
+
+
